@@ -15,7 +15,7 @@
 		</div>
 	</div>
 	<div class="container">
-		<form action="" method="post">
+		<form action="/book/form.do" method="post">
 			<div class="row">
 				<div class="col-md-12 mb-2">
 					<div class="row">
