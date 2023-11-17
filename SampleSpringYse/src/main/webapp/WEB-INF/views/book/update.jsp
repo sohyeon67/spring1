@@ -22,8 +22,8 @@
 							<label for="title" class="col-form-label">제목</label>
 						</div>
 						<div class="col-md-10">
-							<input type="text" class="form-control" name="title" id="title" value=""/>
-						</div>	
+							<input type="text" class="form-control" name="title" id="title" value="${book.TITLE }"/>
+						</div>
 					</div>
 				</div>
 				<div class="col-md-12 mb-2">
@@ -32,7 +32,7 @@
 							<label for="category" class="col-form-label">카테고리</label>
 						</div>
 						<div class="col-md-10">
-							<input type="text" class="form-control" name="category" id="category" value=""/>
+							<input type="text" class="form-control" name="category" id="category" value="${book.CATEGORY }"/>
 						</div>	
 					</div>
 				</div>
@@ -42,12 +42,12 @@
 							<label for="price" class="col-form-label">가격</label>
 						</div>
 						<div class="col-md-10">
-							<input type="text" class="form-control" name="price" id="price" value=""/>
+							<input type="text" class="form-control" name="price" id="price" value="${book.PRICE }"/>
 						</div>	
 					</div>
 				</div>
 				<button type="submit" class="btn btn-info">수정</button>
-				<a href="" class="btn btn-primary">목록</a>
+				<a href="/book/list.do" class="btn btn-primary">목록</a>
 			</div>
 		</form>
 	</div>

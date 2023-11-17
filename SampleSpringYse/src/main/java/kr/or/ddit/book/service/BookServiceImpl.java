@@ -1,5 +1,6 @@
 package kr.or.ddit.book.service;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -44,6 +45,59 @@ public class BookServiceImpl implements IBookService {
 			return map.get("book_id").toString();
 		}
 		return null;
+	}
+
+	/**
+	 * <p>책 상세보기</p>
+	 * @since SampleSpringYse 1.0
+	 * @author ddit
+	 * @param map 책 ID
+	 * @return ID에 해당하는 책 정보
+	 */
+	@Override
+	public Map<String, Object> selectBook(Map<String, Object> map) {
+		// 서비스 내 detail 함수는 dao를 호출한 결과를 바로 리턴하는 일만 한다.
+		return dao.selectBook(map);
+	}
+
+	/**
+	 * <p>책 수정</p>
+	 * @since SampleSpringYse
+	 * @author ddit
+	 * @param map 책 ID
+	 * @return 성공 1(true), 실패 0(false)
+	 */
+	@Override
+	public boolean updateBook(Map<String, Object> map) {
+		// 수정의 경우 입력과는 다르게 PK를 가져오거나 하는 절차가 필요 없으므로 행이 정상적으로 영향 받았는지만 검사하면 된다.
+		int status = dao.updateBook(map);
+		return status == 1;
+	}
+
+	/**
+	 * <p>책 삭제</p>
+	 * @since SampleSpringYse
+	 * @author ddit
+	 * @param map 책 ID
+	 * @return 성공 1(true), 실패 0(false)
+	 */
+	@Override
+	public boolean removeBook(Map<String, Object> map) {
+		// 삭제의 경우 수정과 동일하게 한 개의 행이 제대로 영향받았는지만 검사하면 된다.
+		int status = dao.removeBook(map);
+		return status == 1;
+	}
+
+	/**
+	 * <p>책 목록</p>
+	 * @since SampleSpringYse
+	 * @author ddit
+	 * @param 현재는 없음
+	 * @return 성공 List(책), 실패null
+	 */
+	@Override
+	public List<Map<String, Object>> selectBookList(Map<String, Object> map) {
+		return dao.selectBookList(map);
 	}
 
 }

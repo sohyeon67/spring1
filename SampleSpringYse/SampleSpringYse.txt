@@ -98,5 +98,105 @@
 		> sqlSessionTemplate
 
 
+┌─────────────────────────────
+│	4. 책 입력 만들기
+└─────────────────────────────
 
+	4-1. 책 입력 기능 쿼리 생성
+		- resources source package 아래에 sqlmap 폴더 생성
+		- book_SQL.xml 생성
+		- 책 입력 기능 쿼리 작성
+			> <insert id="insert" parameterType="hashMap" useGeneratedKeys="true"></insert>
+			
+	4-2. 책 입력 DAO 생성
+		- class BookDAO
+		- @Repository 어노테이션으로 데이터를 취급하는 빈이라고 알린다.
+		
+	4-3. 책 입력 service 인터페이스 메소드 생성
+		- interface IBookService
+		- public String insertBook(Map<String, Object> map)
+		
+	4-4. 책 입력 service 클래스 생성
+		- IBookService interface를 참조받은 구현체 클래스
+		- public String insertBook(Map<String, Object> map)
+		- @Service 어노테이션으로 비즈니스 로직을 담당하는 빈이라고 알린다.
+		
+	4-5. 책 입력 컨트롤러 메소드 생성
+		- public ModelAndView insertBook(@RequestParam Map<String, Object> map)
+		- @Controller 어노테이션으로 컨트롤러를 담당하는 빈이라고 알린다.
+		
+	4-6. 책 입력 화면을 출력하고 책 등록 확인하기
+		- 결과 404에러 발생(정상적인 에러)
+			> 책 등록 후, 상세보기 화면으로 이동하는데 상세보기가 현 시점에는 만들어지지 않았으므로 404에러 발생
+			
+	
+┌─────────────────────────────
+│	5. 책 상세보기 만들기
+└─────────────────────────────
+	
+	5-1. 책 상세보기 기능 쿼리 생성
+		- 책 상세 기능 쿼리 작성
+		- <select id="selectBook" parameterType="hashMap" resultType="hashMap"></select>
+		
+	5-2. 책 상세보기 DAO 메소드 생성
+		- public Map<String, Object> selectBook(Map<String, Object> map)
+		
+	5-3. 책 상세보기 service 인터페이스 메소드 생성
+		- public Map<String, Object> selectBook(Map<String, Object> map)
+		
+	5-4. 책 상세보기 service 클래스 메소드 생성
+		- public Map<String, Object> selectBook(Map<String, Object> map)
+		
+	5-5. 책 상세보기 컨트롤러 메소드 생성
+		- public ModelAndView detail(@RequestParam Map<String, Object> map)
+		
+	5-6. 책 상세화면 생성
+		- view/book/detail.jsp
+		
+	5-7. 책 상세보기 화면을 출력하고 책 상세보기 확인(데이터 확인)
+	
+	
+┌─────────────────────────────
+│	6. 책 수정 만들기
+└─────────────────────────────
+	
+	6-1. 책 수정 화면 컨트롤러 메소드 생성
+		- public ModelAndView updateForm(@RequestParam Map<String, Object> map)
+	
+	6-2. 책 수정 화면 뷰 생성
+		- view/book/update.jsp
+		
+	6-3. 책 수정 화면 확인하기
+	
+	6-4. 책 수정 기능 쿼리 생성
+		- 책 수정 기능 쿼리 작성
+		- <update id="update parameterType="hashMap"></update>
+		
+	6-5. 책 수정 기능 DAO 메소드 생성
+		- public int update(Map<String, Object> map)
+		
+	6-6. 책 수정 기능 service 인터페이스 메소드 생성
+		- public boolean updateBook(Map<String, Object> map)
+		
+	6-7. 책 수정 기능 service 클래스 메소드 생성
+		- public boolean updateBook(Map<String, Object> map)
+		
+	6-8. 책 수정 기능 컨트롤러 메소드 생성
+		- public ModelAndView updateBook(@RequestParam Map<String, Object> map)
+		
+	6-9. 책 수정 기능 확인하기
+		- 책 수정 기능 > 책 상세보기 확인
+		
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
