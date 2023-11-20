@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Board">
+
+	<insert id="insertBoard" parameterType="boardVO" useGeneratedKeys="true">
+		<selectKey keyProperty="boNo" resultType="int" order="BEFORE">
+			select seq_board.nextval from dual
+		</selectKey>
+		insert into board(
+			bono, botitle, bocontent, bowriter, bodate
+		) values (
+			#{boNo}, #{boTitle}, #{boContent}, #{boWriter}, sysdate
+		)
+	</insert>
+	
+	<update id="incrementHit" parameterType="int">
+		update board
+		set
+			bohit = bohit + 1
+		where bono = #{boNo}
+	</update>
+	
+	<select id="selectBoard" parameterType="int" resultType="boardVO">
+		select
+			bono, botitle, bocontent, bowriter, bodate, bohit
+		from board
+		where bono = #{boNo}
+	</select>
+
+</mapper>
