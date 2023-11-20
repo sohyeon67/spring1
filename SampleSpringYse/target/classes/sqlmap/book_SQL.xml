@@ -95,7 +95,7 @@
 		- title like '%검색어'일 경우는 검색어로 끝난다는 뜻입니다
 		- title like '%검색어%'일 경우는 검색어를 포함한다는 뜻입니다
 	 -->
-	<select id="selectBookList" resultType="hashMap">
+	<select id="selectBookList" parameterType="hashMap" resultType="hashMap">
 		select
 			book_id, title, category, price, insert_date
 		from book

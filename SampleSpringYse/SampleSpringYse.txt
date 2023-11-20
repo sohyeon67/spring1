@@ -151,7 +151,7 @@
 		- public ModelAndView detail(@RequestParam Map<String, Object> map)
 		
 	5-6. 책 상세화면 생성
-		- view/book/detail.jsp
+		- views/book/detail.jsp
 		
 	5-7. 책 상세보기 화면을 출력하고 책 상세보기 확인(데이터 확인)
 	
@@ -164,13 +164,13 @@
 		- public ModelAndView updateForm(@RequestParam Map<String, Object> map)
 	
 	6-2. 책 수정 화면 뷰 생성
-		- view/book/update.jsp
+		- views/book/update.jsp
 		
 	6-3. 책 수정 화면 확인하기
 	
 	6-4. 책 수정 기능 쿼리 생성
 		- 책 수정 기능 쿼리 작성
-		- <update id="update parameterType="hashMap"></update>
+		- <update id="update" parameterType="hashMap"></update>
 		
 	6-5. 책 수정 기능 DAO 메소드 생성
 		- public int update(Map<String, Object> map)
@@ -188,10 +188,70 @@
 		- 책 수정 기능 > 책 상세보기 확인
 		
 	
+┌─────────────────────────────
+│	7. 책 삭제 만들기
+└─────────────────────────────
 	
+	7-1. 책 삭제 기능 쿼리 생성
+		- 책 삭제 기능 쿼리 작성
+		- <delete id="deleteBook" parameterType="hashMap"></delete>
+		
+	7-2. 책 삭제 기능 DAO 메소드 생성
+		- public int delete(Map<String, Object> map)
+		
+	7-3. 책 삭제 기능 service 인터페이스 메소드 생성
+		- public boolean removeBook(Map<String, Object> map)
+		
+	7-4. 책 삭제 기능 service 클래스 메소드 생성
+		- public boolean removeBook(Map<String, Object> map)
+		
+	7-5. 책 삭제 기능 컨트롤러 메소드 생성
+		- public ModelAndView removeBook(Map<String, Object> map)
+		
+	7-6. 책 삭제 기능 확인하기
+		- 책 삭제 기능 > 책 목록
+		
+┌─────────────────────────────
+│	8. 책 목록 만들기
+└─────────────────────────────
 	
+	8-1. 책 목록 기능 쿼리 생성
+		- 책 목록 기능 쿼리 작성
+		- <select id="selectBookList" parameterType="hashMap" resultType="hashMap"></select>
+		
+	8-2. 책 목록 기능 DAO 메소드 생성
+		- List<Map<String, Object>> selectBookList(Map<String, Object> map)
+		
+	8-3. 책 목록 기능 service 인터페이스 메소드 생성
+		- List<Map<String, Object>> selectBookList(Map<String, Object> map)
+		
+	8-4. 책 목록 기능 service 클래스 메소드 생성
+		- List<Map<String, Object>> selectBookList(Map<String, Object> map)
+		
+	8-5. 책 목록 기능 컨트롤러 메소드 생성
+		- public ModelAndView list(@RequestParam Map<String, Object> map)
+		
+	8-6. 책 목록 화면 뷰 생성
+		- views/book/list.jsp
 	
+	8-7. 책 목록 기능 확인하기
 	
+┌─────────────────────────────
+│	9. 책 검색 만들기
+└─────────────────────────────
+	
+	9-1. 책 검색 기능 쿼리 생성
+		- <select id="selectBookList" parameterType="hashMap" resultType="hashMap"></select>
+		> 기존 목록 데이터 조회 시, 사용했던 쿼리 내에 동적 쿼리 추가(mybatis 조건절 부여)
+		
+	9-2. 책 검색 기능 목록 컨트롤러 메소드 수정
+	
+	9-3. 책 검색 화면 뷰 수정
+		- views/book/list.jsp 수정
+		
+	9-4. 책 검색 기능 확인하기
+	
+
 	
 	
 	
