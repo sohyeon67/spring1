@@ -48,7 +48,7 @@
 					</div>
 				</div>
 				<button type="submit" class="btn btn-warning">등록</button>
-				<a href="" class="btn btn-primary">목록</a>
+				<a href="/book/list.do" class="btn btn-primary">목록</a>
 			</div>
 		</form>
 	</div>
