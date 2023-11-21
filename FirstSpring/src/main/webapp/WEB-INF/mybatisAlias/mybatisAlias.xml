@@ -10,6 +10,7 @@
 	
 	<typeAliases>
 		<typeAlias type="kr.or.ddit.vo.BoardVO" alias="boardVO"/>
+		<typeAlias type="kr.or.ddit.vo.PaginationInfoVO" alias="pagingVO"/>
 	</typeAliases>
 
 </configuration>

@@ -1,6 +1,5 @@
 <%@ page contentType="text/html; charset=utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html; charset=utf-8"%>
 <html>
 <head>
 <link href="${pageContext.request.contextPath }/resources/css/bootstrap.min.css" rel="stylesheet">
@@ -16,6 +15,10 @@
 }
 </style>
 <body>
+<c:set value="등록" var="name"/>
+<c:if test="${status eq 'u' }">
+	<c:set value="수정" var="name"/>
+</c:if>
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="bootstrap" viewBox="0 0 118 94">
     <title>Bootstrap</title>
@@ -89,25 +92,32 @@
 				<div class="">
 					<div class="card-body">
 						<form method="post" action="/board/insert.do" id="boardForm" class="form-horizontal">
+							<c:if test="${status eq 'u' }">
+								<input type="hidden" name="boNo" value="${board.boNo }"/>
+							</c:if>
 							<div class="form-group row">
 								<label class="col-sm-2 control-label" >제목</label>
 								<div class="col-sm-10">
-									<input name="boTitle" type="text" id="boTitle" class="form-control" value="${boardVO.boTitle }" placeholder="subject">
+									<input name="boTitle" type="text" id="boTitle" class="form-control" value="${board.boTitle }" placeholder="subject">
 								</div>
 								<font color="red" style="font-size: 12px;">${erros.boTitle }</font>
 							</div>
 							<div class="form-group row mt-4">
 								<label class="col-sm-2 control-label" >내용</label>
 								<div class="col-sm-10">
-									<textarea name="boContent" id="boContent" cols="50" rows="5" class="form-control" placeholder="content">${boardVO.boContent }</textarea>
+									<textarea name="boContent" id="boContent" cols="50" rows="5" class="form-control" placeholder="content">${board.boContent }</textarea>
 								</div>
 								<font color="red" style="font-size: 12px;">${errors.boContent }</font>
 							</div>
 							<div class="form-group row mt-4">
 								<div class="col-sm-offset-2 col-sm-12 ">
-									<input type="button" value="등록" class="btn btn-primary float-right" id="addBtn">
-									<input type="button" value="취소" class="btn btn-danger float-right" id="cancelBtn">
-									<input type="button" value="목록" class="btn btn-success float-right" id="listBtn">
+									<input type="button" value="${name }" class="btn btn-primary float-right" id="addBtn">
+									<c:if test="${status eq 'u' }">
+										<input type="button" value="취소" class="btn btn-danger float-right" id="cancelBtn">
+									</c:if>
+									<c:if test="${status ne 'u' }">
+										<input type="button" value="목록" class="btn btn-success float-right" id="listBtn">
+									</c:if>
 								</div>
 							</div>
 						</form>
@@ -152,12 +162,17 @@ $(function() {
 			return false;
 		}
 		
+		// 수정일 때, 경로를 변경한다. (기존은 등록 경로로 설정되어 있음)
+		if($(this).val() == "수정") {
+			boardForm.attr("action", "/board/update.do");
+		}
+		
 		boardForm.submit();
 	});
 	
 	// 취소 버튼 이벤트
 	cancelBtn.on("click", function() {
-			
+		location.href = "/board/detail.do?boNo=${board.boNo}";
 	});
 	
 	// 목록 버튼 이벤트

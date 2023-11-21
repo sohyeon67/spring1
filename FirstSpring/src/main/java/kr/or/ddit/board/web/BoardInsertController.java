@@ -47,7 +47,7 @@ public class BoardInsertController {
 			// 다시 클라이언트로 내가 입력했던 제목, 내용 돌려준다
 			// 에러정보도 전달
 			// 이때, 페이지는 어디로?
-			model.addAttribute("boardVO", boardVO);
+			model.addAttribute("board", boardVO);
 			model.addAttribute("errors", errors);
 			goPage = "board/form";
 		} else {	// 에러가 없는 정상적인 데이터가 입력되었다
@@ -56,7 +56,7 @@ public class BoardInsertController {
 			if(result.equals(ServiceResult.OK)) {
 				goPage = "redirect:/board/detail.do?boNo="+boardVO.getBoNo();	// 주소창 변경
 			} else {
-				model.addAttribute("boardVO", boardVO);
+				model.addAttribute("board", boardVO);
 				model.addAttribute("message", "서버 에러, 다시 시도해주세요!");
 				goPage = "board/form";	// 포워드. 주소창이 insert.do
 			}

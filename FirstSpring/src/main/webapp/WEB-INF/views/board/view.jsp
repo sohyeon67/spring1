@@ -3,7 +3,7 @@
 <head>
 <link href="${pageContext.request.contextPath }/resources/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/headers.css">
-<script src="${pageContext.request.contextPath}/resources/plugins/jquery/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <title>일반게시판 등록/수정</title>
 </head>
 <style>
@@ -100,6 +100,9 @@
 						<button type="button" class="btn btn-info" id="modifyBtn">수정</button>
 						<button type="button" class="btn btn-danger" id="delBtn">삭제</button>
 					</div>
+					<form action="/board/update.do" method="get" id="boardForm">
+						<input type="hidden" name="boNo" value="${board.boNo }"/>
+					</form>
 				</div>
 			</div>
 			<div class="col-md-12"><br/><br/><br/></div>
@@ -107,6 +110,33 @@
 	</div>
 </main>
 </body>
+<script type="text/javascript">
+$(function() {
+	var boardForm = $("#boardForm");
+	var listBtn = $("#listBtn");
+	var modifyBtn = $("#modifyBtn");
+	var delBtn = $("#delBtn");
+	
+	// 목록 버튼 이벤트
+	listBtn.on("click", function() {
+		location.href = "/board/list.do";
+	});
+	
+	// 수정 버튼 이벤트
+	modifyBtn.on("click", function() {
+		boardForm.submit();
+	});
+	
+	// 삭제 버튼 이벤트
+	delBtn.on("click", function() {
+		if(confirm("정말로 삭제하시겠습니까?")) {
+			boardForm.attr("action", "/board/delete.do");
+			boardForm.attr("method", "post");
+			boardForm.submit();
+		}
+	});
+});
+</script>
 </html>
 
 
