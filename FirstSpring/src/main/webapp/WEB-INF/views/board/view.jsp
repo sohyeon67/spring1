@@ -129,7 +129,9 @@ $(function() {
 	
 	// 삭제 버튼 이벤트
 	delBtn.on("click", function() {
+		// 삭제 여부를 묻고나서 삭제한다.
 		if(confirm("정말로 삭제하시겠습니까?")) {
+			// 수정과 삭제에서 둘 다 게시판 번호를 사용하므로 같은 form에 대하여 속성만 달리해서 사용한다.
 			boardForm.attr("action", "/board/delete.do");
 			boardForm.attr("method", "post");
 			boardForm.submit();

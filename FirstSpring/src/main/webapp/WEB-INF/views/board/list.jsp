@@ -90,18 +90,19 @@
 						</div>
 						<h3 class="card-title">일반게시판</h3>
 						<div align="right">
-							<span class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill">전체 0건</span>
+							<span class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill">전체 ${pagingVO.totalRecord }건</span>
 						</div>
 					</div>
 					<div class="card-body mt-3">
 						<div align="right">
+							<!-- 검색 및 페이징을 위한 form -->
 							<form class="input-group input-group-sm" method="post" id="searchForm" style="width: 440px;">
 								<input type="hidden" name="page" id="page"/>
 								<select class="form-control" name="searchType">
 									<option value="title">제목</option>
 									<option value="writer">작성자</option>
 								</select>
-								<input type="text" name="searchWord" class="form-control float-right" value="" placeholder="Search">
+								<input type="text" name="searchWord" class="form-control float-right" value="${searchWord }" placeholder="Search">
 								<div class="input-group-append">
 									<button type="submit" class="btn btn-default">
 										<i class="fas fa-search"></i>검색
@@ -164,8 +165,9 @@ $(function() {
 	var pagingArea = $("#pagingArea");
 	var searchForm = $("#searchForm");
 	
+	// 페이지를 바꿀 때 이벤트 처리
 	pagingArea.on("click", "a", function(event) {
-		event.preventDefault();	// a태그 이벤트
+		event.preventDefault();	// a태그 기본 동작 방지
 		var pageNo = $(this).data("page");
 		searchForm.find("#page").val(pageNo);
 		searchForm.submit();

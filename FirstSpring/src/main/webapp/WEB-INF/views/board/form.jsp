@@ -15,6 +15,7 @@
 }
 </style>
 <body>
+<!-- 등록과 수정에서 쓰이는 form.jsp -->
 <c:set value="등록" var="name"/>
 <c:if test="${status eq 'u' }">
 	<c:set value="수정" var="name"/>
@@ -92,6 +93,7 @@
 				<div class="">
 					<div class="card-body">
 						<form method="post" action="/board/insert.do" id="boardForm" class="form-horizontal">
+							<!-- 수정 때 필요한 게시글 번호를 전달하기 위함 -->
 							<c:if test="${status eq 'u' }">
 								<input type="hidden" name="boNo" value="${board.boNo }"/>
 							</c:if>
@@ -157,7 +159,7 @@ $(function() {
 		
 		// 내용을 입력하지 않았을 때 발생할 이벤트
 		if(content == null || content == "") {
-			alert("제목을 입력해주세요!");
+			alert("내용을 입력해주세요!");
 			$("#boContent").focus();
 			return false;
 		}
@@ -165,8 +167,11 @@ $(function() {
 		// 수정일 때, 경로를 변경한다. (기존은 등록 경로로 설정되어 있음)
 		if($(this).val() == "수정") {
 			boardForm.attr("action", "/board/update.do");
+			// 수정일 때는 게시글 번호가 필요하므로 위에 input type="hidden"으로 값을 전달하였음.
+			// 등록이나 수정이나 둘 다 post 방식으로 전달한다.
 		}
 		
+		// 넘겨줄 때 form에 있는 요소들의 name 값이 VO 변수 이름값과 같아야 한다.
 		boardForm.submit();
 	});
 	

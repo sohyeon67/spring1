@@ -49,7 +49,7 @@ public class BoardInsertController {
 			// 이때, 페이지는 어디로?
 			model.addAttribute("board", boardVO);
 			model.addAttribute("errors", errors);
-			goPage = "board/form";
+			goPage = "board/form";	// 포워드 방식, 주소창은 /notice/insert.do
 		} else {	// 에러가 없는 정상적인 데이터가 입력되었다
 			boardVO.setBoWriter("a001");
 			ServiceResult result = boardService.insertBoard(boardVO);
@@ -58,7 +58,7 @@ public class BoardInsertController {
 			} else {
 				model.addAttribute("board", boardVO);
 				model.addAttribute("message", "서버 에러, 다시 시도해주세요!");
-				goPage = "board/form";	// 포워드. 주소창이 insert.do
+				goPage = "board/form";	// 포워드 방식, 주소창은 /notice/insert.do
 			}
 		}
 		

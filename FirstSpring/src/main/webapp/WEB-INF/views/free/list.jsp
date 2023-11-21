@@ -134,7 +134,7 @@
 							</table>
 						</div>
 						<div align="left">
-							<a href="" class="btn btn-primary">등록</a>
+							<a href="/free/form.do" class="btn btn-primary">등록</a>
 						</div>
 					</div>
 					<div class="card-footer clearfix mt-4" id="pagingArea"></div>

@@ -5,7 +5,7 @@
 <head>
 <link href="${pageContext.request.contextPath }/resources/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/headers.css">
-<script src="${pageContext.request.contextPath}/resources/plugins/jquery/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath }/resources/ckeditor/ckeditor.js"></script>
 <title>공지사항게시판 등록/수정</title>
 </head>
@@ -16,6 +16,11 @@
 }
 </style>
 <body>
+<!-- 등록과 수정에서 쓰이는 form.jsp -->
+<c:set value="등록" var="name"/>
+<c:if test="${status eq 'u' }">
+	<c:set value="수정" var="name"/>
+</c:if>
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="bootstrap" viewBox="0 0 118 94">
     <title>Bootstrap</title>
@@ -88,26 +93,34 @@
 			<div class="col-md-12">
 				<div class="">
 					<div class="card-body">
-						<form method="post" action="" id="boardForm" class="form-horizontal">
+						<form method="post" action="/notice/insert.do" id="noticeForm" class="form-horizontal">
+							<!-- 수정 때 필요한 게시글 번호를 전달하기 위함 -->
+							<c:if test="${status eq 'u' }">
+								<input type="hidden" name="noticeNo" value="${notice.noticeNo }"/>
+							</c:if>
 							<div class="form-group row">
 								<label class="col-sm-2 control-label" >제목</label>
 								<div class="col-sm-10">
-									<input name="boTitle" type="text" class="form-control" value="" placeholder="subject">
+									<input name="noticeTitle" id="noticeTitle" type="text" class="form-control" value="${notice.noticeTitle }" placeholder="subject">
 								</div>
-								<font color="red" style="font-size: 12px;"></font>
+								<font color="red" style="font-size: 12px;">${erros.noticeTitle }</font>
 							</div>
 							<div class="form-group row mt-4">
 								<label class="col-sm-2 control-label" >내용</label>
 								<div class="col-sm-10">
-									<textarea name="boContent" cols="50" rows="5" class="form-control" placeholder="content"></textarea>
+									<textarea name="noticeContent" id="noticeContent" cols="50" rows="5" class="form-control" placeholder="content">${notice.noticeContent }</textarea>
 								</div>
-								<font color="red" style="font-size: 12px;"></font>
+								<font color="red" style="font-size: 12px;">${erros.noticeContent }</font>
 							</div>
 							<div class="form-group row mt-4">
 								<div class="col-sm-offset-2 col-sm-12 ">
-									<input type="button" value="등록" class="btn btn-primary float-right" id="addBtn">
-									<input type="button" value="취소" class="btn btn-danger float-right" id="cancelBtn">
-									<input type="button" value="목록" class="btn btn-success float-right" id="listBtn">
+									<input type="button" value="${name }" class="btn btn-primary float-right" id="addBtn">
+									<c:if test="${status eq 'u' }">
+										<input type="button" value="취소" class="btn btn-danger float-right" id="cancelBtn">
+									</c:if>
+									<c:if test="${status ne 'u' }">
+										<input type="button" value="목록" class="btn btn-success float-right" id="listBtn">
+									</c:if>
 								</div>
 							</div>
 						</form>
@@ -119,4 +132,59 @@
 	</div>
 </main>
 </body>
+<script type="text/javascript">
+$(function() {
+	CKEDITOR.replace("noticeContent");	// CKEDITOR를 textarea에 등록
+	
+	var addBtn = $("#addBtn");			// 등록버튼
+	var cancelBtn = $("#cancelBtn");	// 취소버튼
+	var listBtn = $("#listBtn");		// 목록버튼
+	var noticeForm = $("#noticeForm");	// 등록 Form
+	
+	// 등록 이벤트
+	addBtn.on("click", function() {
+		var title = $("#noticeTitle").val();	// 제목 데이터
+		
+		// textarea 사용시
+//		var content = $("#noContent").val();	// 내용 데이터
+		
+		// CKEDITOR를 이용해서 데이터를 가져와야 할 때 사용하는 방법
+		var content = CKEDITOR.instances.noticeContent.getData();	// 내용 데이터
+		
+		// 글 등록 시 입력값 검증
+		if(title == null || title == "") {
+			alert("제목을 입력해주세요!");
+			$("#noticeTitle").focus();
+			return false;
+		}
+		if(content == null || content == "") {
+			alert("내용을 입력해주세요!");
+			$("#noticeContent").focus();
+			return false;
+		}
+		
+		// 수정일 때, 경로를 변경한다. (기존은 등록 경로로 설정되어 있음)
+		if($(this).val() == "수정") {
+			noticeForm.attr("action", "/notice/update.do");
+			// 수정일 때는 게시글 번호가 필요하므로 위에 input type="hidden"으로 값을 전달하였음.
+			// 등록이나 수정이나 둘 다 post 방식으로 전달한다.
+		}
+		
+		// 넘겨줄 때 form에 있는 요소들의 name 값이 VO 변수 이름값과 같아야 한다.
+		noticeForm.submit();
+	});
+	
+	// 취소 버튼 이벤트
+	cancelBtn.on("click", function() {
+		location.href = "/notice/detail.do?noticeNo=${notice.noticeNo}";
+	});
+	
+	// 목록 버튼 이벤트
+	listBtn.on("click", function() {
+		location.href = "/notice/list.do";
+	});
+	
+});
+
+</script>
 </html>

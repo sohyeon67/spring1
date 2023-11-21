@@ -3,7 +3,7 @@
 <head>
 <link href="${pageContext.request.contextPath }/resources/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/headers.css">
-<script src="${pageContext.request.contextPath}/resources/plugins/jquery/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <title>자유게시판 등록/수정</title>
 </head>
 <style>
@@ -85,14 +85,14 @@
 			<div class="col-md-12">
 				<div class="">
 					<div class="card-header">
-						<h3 class="card-title"></h3>
+						<h3 class="card-title">${free.freeTitle }</h3>
 						<div class="card-tools mt-1">
-							
+							${free.freeWriter } ${free.freeDate } ${free.freeHit }
 						</div>
 					</div>
 					<div class="card-body">
 						<div class="form-group row mt-1">
-							<div class="col-sm-12"></div>
+							<div class="col-sm-12">${free.freeContent }</div>
 						</div>
 					</div>
 					<div class="card-footer">
@@ -100,6 +100,9 @@
 						<button type="button" class="btn btn-info" id="modifyBtn">수정</button>
 						<button type="button" class="btn btn-danger" id="delBtn">삭제</button>
 					</div>
+					<form action="/free/update.do" method="get" id="freeForm">
+						<input type="hidden" name="freeNo" value="${free.freeNo }"/>
+					</form>
 				</div>
 			</div>
 			<div class="col-md-12"><br/><br/><br/></div>
@@ -107,6 +110,34 @@
 	</div>
 </main>
 </body>
+<script type="text/javascript">
+$(function() {
+	var listBtn = $("#listBtn");
+	var modifyBtn = $("#modifyBtn");
+	var delBtn = $("#delBtn");
+	var freeForm = $("#freeForm");
+	
+	// 목록 버튼 이벤트
+	listBtn.on("click", function() {
+		location.href = "/free/list.do";
+	});
+	
+	// 수정 버튼 이벤트
+	modifyBtn.on("click", function() {
+		freeForm.submit();
+	});
+	
+	// 삭제 버튼 이벤트
+	delBtn.on("click", function() {
+		// 삭제 여부를 묻고 삭제하기
+		if(confirm("정말로 삭제하시겠습니까?")) {
+			freeForm.attr("action", "/free/delete.do");
+			freeForm.attr("method", "post");
+			freeForm.submit();
+		}
+	});
+});
+</script>
 </html>
 
 

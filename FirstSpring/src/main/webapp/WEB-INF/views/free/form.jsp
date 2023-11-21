@@ -5,7 +5,7 @@
 <head>
 <link href="${pageContext.request.contextPath }/resources/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/headers.css">
-<script src="${pageContext.request.contextPath}/resources/plugins/jquery/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath }/resources/ckeditor/ckeditor.js"></script>
 <title>자유게시판 등록/수정</title>
 </head>
@@ -16,6 +16,11 @@
 }
 </style>
 <body>
+<!-- 등록과 수정을 구분한다. -->
+<c:set value="등록" var="name"/>
+<c:if test="${status eq 'u' }">
+	<c:set value="수정" var="name"/>
+</c:if>
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="bootstrap" viewBox="0 0 118 94">
     <title>Bootstrap</title>
@@ -88,26 +93,34 @@
 			<div class="col-md-12">
 				<div class="">
 					<div class="card-body">
-						<form method="post" action="" id="boardForm" class="form-horizontal">
+						<form method="post" action="/free/insert.do" id="freeForm" class="form-horizontal">
+							<!-- 수정 폼일 때 freeNo를 전달한다. -->
+							<c:if test="${status eq 'u' }">
+								<input type="hidden" name="freeNo" value="${free.freeNo }"/>
+							</c:if>
 							<div class="form-group row">
 								<label class="col-sm-2 control-label" >제목</label>
 								<div class="col-sm-10">
-									<input name="boTitle" type="text" class="form-control" value="" placeholder="subject">
+									<input name="freeTitle" id="freeTitle" type="text" class="form-control" value="${free.freeTitle }" placeholder="subject">
 								</div>
-								<font color="red" style="font-size: 12px;"></font>
+								<font color="red" style="font-size: 12px;">${errors.freeTitle }</font>
 							</div>
 							<div class="form-group row mt-4">
 								<label class="col-sm-2 control-label" >내용</label>
 								<div class="col-sm-10">
-									<textarea name="boContent" cols="50" rows="5" class="form-control" placeholder="content"></textarea>
+									<textarea name="freeContent" id="freeContent" cols="50" rows="5" class="form-control" placeholder="content">${free.freeContent }</textarea>
 								</div>
-								<font color="red" style="font-size: 12px;"></font>
+								<font color="red" style="font-size: 12px;">${errors.freeContent }</font>
 							</div>
 							<div class="form-group row mt-4">
 								<div class="col-sm-offset-2 col-sm-12 ">
-									<input type="button" value="등록" class="btn btn-primary float-right" id="addBtn">
-									<input type="button" value="취소" class="btn btn-danger float-right" id="cancelBtn">
-									<input type="button" value="목록" class="btn btn-success float-right" id="listBtn">
+									<input type="button" value="${name }" class="btn btn-primary float-right" id="addBtn">
+									<c:if test="${status eq 'u' }">
+										<input type="button" value="취소" class="btn btn-danger float-right" id="cancelBtn">
+									</c:if>
+									<c:if test="${status ne 'u' }">
+										<input type="button" value="목록" class="btn btn-success float-right" id="listBtn">
+									</c:if>
 								</div>
 							</div>
 						</form>
@@ -119,4 +132,54 @@
 	</div>
 </main>
 </body>
+<script type="text/javascript">
+$(function() {
+	CKEDITOR.replace("freeContent");	// CKEDITOR를 textarea에 등록
+	
+	var addBtn = $("#addBtn");			// 등록버튼
+	var cancelBtn = $("#cancelBtn");	// 취소버튼
+	var listBtn = $("#listBtn");		// 목록버튼
+	var freeForm = $("#freeForm");		// 등록 Form
+	
+	// 등록 이벤트
+	addBtn.on("click", function() {
+		var title = $("#freeTitle").val();	// 제목 데이터
+		
+		// CKEDITOR를 이용해서 데이터를 가져와야 할 때 사용하는 방법
+		var content = CKEDITOR.instances.freeContent.getData();	// 내용 데이터
+		
+		// 글 등록 시 입력값 검증
+		if(title == null || title == "") {
+			alert("제목을 입력해주세요!");
+			$("#freeTitle").focus();
+			return false;
+		}
+		if(content == null || content == "") {
+			alert("내용을 입력해주세요!");
+			$("#freeContent").focus();
+			return false;
+		}
+		
+		// 수정일 때 경로 변경
+		if($(this).val() == "수정") {	// val() 괄호 까먹지 말기.. () 없으면 insert해버림
+			freeForm.attr("action", "/free/update.do");
+			// 수정일 때 hidden으로 글 번호 전달. post
+		}
+		
+		// 넘겨줄 때 form에 있는 요소들의 name 값이 VO 변수 이름값과 같아야 한다.
+		freeForm.submit();
+	});
+	
+	// 취소 버튼 이벤트
+	cancelBtn.on("click", function() {
+		location.href = "/free/detail.do?freeNo=${free.freeNo}";
+	});
+	
+	// 목록 버튼 이벤트
+	listBtn.on("click", function() {
+		location.href = "/free/list.do";
+	});
+	
+});
+</script>
 </html>

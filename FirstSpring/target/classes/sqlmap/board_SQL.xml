@@ -4,7 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Board">
 
-	<!-- 페이징, 검색 -->
+	<!-- 검색 조건 -->
 	<sql id="boardSearch">
 		<if test="searchType != null and searchType == 'title'">
 			and (botitle like '%'||#{searchWord}||'%')
@@ -13,7 +13,7 @@
 			and (bowriter like '%'||#{searchWord}||'%')
 		</if>
 	</sql>
-	<!-- 페이징, 검색 END -->
+	<!-- 검색 조건 END -->
 
 	<insert id="insertBoard" parameterType="boardVO" useGeneratedKeys="true">
 		<selectKey keyProperty="boNo" resultType="int" order="BEFORE">
@@ -60,13 +60,15 @@
 		from board
 	</select>
 	
-	<!-- 페이징, 검색 -->
+	<!-- 페이징, 검색 *********************-->
+	<!-- totalRecord 구하기 -->
 	<select id="selectBoardCount" parameterType="pagingVO" resultType="int">
 		select count(bono) from board
 		where 1=1
 		<include refid="boardSearch"/>
 	</select>
 	
+	<!-- 현재 페이지의 리스트들만 보이기 -->
 	<select id="selectBoardList" parameterType="pagingVO" resultType="boardVO">
 		select b.*
 		from(
@@ -85,6 +87,6 @@
 			where b.rnum >= #{startRow} and b.rnum <= #{endRow}
 		]]>
 	</select>
-	<!-- 페이징, 검색 END -->
+	<!-- 페이징, 검색 END *********************-->
 	
 </mapper>

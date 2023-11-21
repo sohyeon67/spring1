@@ -4,7 +4,7 @@
 <head>
 <link href="${pageContext.request.contextPath }/resources/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/headers.css">
-<script src="${pageContext.request.contextPath}/resources/plugins/jquery/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <title>공지사항게시판</title>
 </head>
 <style>
@@ -90,17 +90,19 @@
 						</div>
 						<h3 class="card-title">공지사항게시판</h3>
 						<div align="right">
-							<span class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill">전체 0건</span>
+							<span class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill">전체 ${pagingVO.totalRecord }건</span>
 						</div>
 					</div>
 					<div class="card-body mt-3">
 						<div align="right">
+							<!-- 검색 및 페이징을 위한 form -->
 							<form class="input-group input-group-sm" method="post" id="searchForm" style="width: 440px;">
+								<input type="hidden" name="page" id="page"/>
 								<select class="form-control" name="searchType">
 									<option value="title">제목</option>
 									<option value="writer">작성자</option>
 								</select>
-								<input type="text" name="searchWord" class="form-control float-right" value="" placeholder="Search">
+								<input type="text" name="searchWord" class="form-control float-right" value="${searchWord }" placeholder="Search">
 								<div class="input-group-append">
 									<button type="submit" class="btn btn-default">
 										<i class="fas fa-search"></i>검색
@@ -120,24 +122,37 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td colspan="5">조회하신 게시글이 존재하지 않습니다.</td>
-									</tr>
-									<tr>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
+									<c:set value="${pagingVO.dataList }" var="noticeList"/>
+									<c:choose>
+										<c:when test="${empty noticeList }">
+											<tr>
+												<td colspan="5">조회하신 게시글이 존재하지 않습니다.</td>
+											</tr>
+										</c:when>
+										<c:otherwise>
+											<c:forEach items="${noticeList }" var="notice">
+												<tr>
+													<td>${notice.noticeNo }</td>
+													<td>
+														<a href="/notice/detail.do?noticeNo=${notice.noticeNo }">${notice.noticeTitle }</a>
+													</td>
+													<td>${notice.noticeWriter }</td>
+													<td>${notice.noticeDate }</td>
+													<td>${notice.noticeHit }</td>
+												</tr>
+											</c:forEach>
+										</c:otherwise>
+									</c:choose>
 								</tbody>
 							</table>
 						</div>
 						<div align="left">
-							<a href="" class="btn btn-primary">등록</a>
+							<a href="/notice/form.do" class="btn btn-primary">등록</a>
 						</div>
 					</div>
-					<div class="card-footer clearfix mt-4" id="pagingArea"></div>
+					<div class="card-footer clearfix mt-4" id="pagingArea">
+						${pagingVO.pagingHTML }
+					</div>
 				</div>
 			</div>
 			<div class="col-md-12"><br/><br/><br/></div>
@@ -145,4 +160,18 @@
 	</div>
 </main>
 </body>
+<script type="text/javascript">
+$(function() {
+	var pagingArea = $("#pagingArea");
+	var searchForm = $("#searchForm");
+	
+	// 페이지를 바꿀 때 이벤트 처리
+	pagingArea.on("click", "a", function() {
+		event.preventDefault();	// a태그 기본 동작 방지
+		var pageNo = $(this).data("page");
+		searchForm.find("#page").val(pageNo);
+		searchForm.submit();
+	});
+});
+</script>
 </html>

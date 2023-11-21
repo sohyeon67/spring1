@@ -57,6 +57,9 @@ public class BoardRetreiveController {
 	
 	@RequestMapping(value="/detail.do", method = RequestMethod.GET)
 	public String boardDetail(int boNo, Model model) {
+		// insert 이후 전달된 파라미터 boNo는 쿼리스트링으로 전달한 파라미터 이름으로 동일해야 함
+		// select해서 나온 컬럼명이 bono
+		// 데이터베이스 조회 시 대소문자 상관없어서 잘 갖고오는 듯 하다.
 		BoardVO boardVO = boardService.selectBoard(boNo);
 		model.addAttribute("board", boardVO);
 		return "board/view";

@@ -3,7 +3,7 @@
 <head>
 <link href="${pageContext.request.contextPath }/resources/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/headers.css">
-<script src="${pageContext.request.contextPath}/resources/plugins/jquery/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <title>공지사항게시판 등록/수정</title>
 </head>
 <style>
@@ -85,14 +85,14 @@
 			<div class="col-md-12">
 				<div class="">
 					<div class="card-header">
-						<h3 class="card-title"></h3>
+						<h3 class="card-title">${notice.noticeTitle }</h3>
 						<div class="card-tools mt-1">
-							
+							${notice.noticeWriter } ${notice.noticeDate } ${notice.noticeHit }
 						</div>
 					</div>
 					<div class="card-body">
 						<div class="form-group row mt-1">
-							<div class="col-sm-12"></div>
+							<div class="col-sm-12">${notice.noticeContent }</div>
 						</div>
 					</div>
 					<div class="card-footer">
@@ -100,6 +100,9 @@
 						<button type="button" class="btn btn-info" id="modifyBtn">수정</button>
 						<button type="button" class="btn btn-danger" id="delBtn">삭제</button>
 					</div>
+					<form action="/notice/update.do" method="get" id="noticeForm">
+						<input type="hidden" name="noticeNo" value="${notice.noticeNo }"}/>
+					</form>
 				</div>
 			</div>
 			<div class="col-md-12"><br/><br/><br/></div>
@@ -107,6 +110,35 @@
 	</div>
 </main>
 </body>
+<script type="text/javascript">
+$(function() {
+	var listBtn = $("#listBtn");
+	var modifyBtn = $("#modifyBtn");
+	var delBtn = $("#delBtn");
+	var noticeForm = $("#noticeForm");
+	
+	// 목록 버튼 이벤트
+	listBtn.on("click", function() {
+		location.href = "/notice/list.do";
+	});
+	
+	// 수정 버튼 이벤트
+	modifyBtn.on("click", function() {
+		noticeForm.submit();
+	});
+	
+	// 삭제 버튼 이벤트
+	delBtn.on("click", function() {
+		// 삭제 여부를 묻고나서 삭제한다.
+		if(confirm("정말로 삭제하시겠습니까?")) {
+			// 수정과 삭제에서 둘 다 게시판 번호를 사용하므로 같은 form에 대하여 속성만 달리해서 사용한다.
+			noticeForm.attr("action", "/notice/delete.do");
+			noticeForm.attr("method", "post");
+			noticeForm.submit();
+		}
+	});
+});
+</script>
 </html>
 
 
