@@ -43,6 +43,45 @@
 		where free_no = #{freeNo}
 	</delete>
 	
+	<!-- 페이징, 검색 *********************-->
 	
+	<!-- 검색 조건 -->
+	<sql id="freeSearch">
+		<if test="searchType != null and searchType == 'title'">
+			and (free_title like '%'||#{searchWord}||'%')
+		</if>
+		<if test="searchType != null and searchType == 'writer'">
+			and (free_writer like '%'||#{searchWord}||'%')
+		</if>
+	</sql>
+	<!-- 검색 조건 END -->
+	
+	<!-- totalRecord 구하기 -->
+	<select id="selectFreeCount" parameterType="pagingVO" resultType="int">
+		select count(free_no) from free
+		where 1=1
+		<include refid="freeSearch"/>
+	</select>
+	
+	<!-- 현재 페이지의 리스트들만 보이기 -->
+	<select id="selectFreeList" parameterType="pagingVO" resultType="freeVO">
+		select b.*
+		from(
+			select
+				a.*, row_number() over (order by a.free_no desc) rnum
+			from(
+				select
+					free_no, free_title, free_content, free_writer, free_date, free_hit
+				from free
+				where 1=1
+				<include refid="freeSearch"/>
+				order by free_no desc
+			) a
+		) b
+		<![CDATA[
+			where b.rnum >= #{startRow} and b.rnum <= #{endRow}
+		]]>
+	</select>
+	<!-- 페이징, 검색 END *********************-->
 
 </mapper>

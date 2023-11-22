@@ -88,7 +88,7 @@
 					<h5>일반 게시판</h5>
 				</div>
 				<div align="right">
-					<span class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill">전체 ${boardCount }건</span>
+					<span class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill">전체 ${allCount.BOARDCNT }건</span>
 				</div>
 				<form action="" method="post">
 					<div style="padding-top: 50px">
@@ -105,7 +105,7 @@
 									</tr>
 								</c:when>
 								<c:otherwise>
-									<c:forEach begin="0" end="4" items="${boardList }" var="board">
+									<c:forEach items="${boardList }" var="board">
 										<tr>
 											<td>${board.boNo }</td>
 											<td>${board.boTitle }</td>
@@ -124,7 +124,7 @@
 					<h5>공지사항</h5>
 				</div>
 				<div align="right">
-					<span class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill">전체 0건</span>
+					<span class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill">전체 ${allCount.NOTICECNT }건</span>
 				</div>
 				<form action="" method="post">
 					<div style="padding-top: 50px">
@@ -134,15 +134,22 @@
 								<th>제목</th>
 								<th>작성일</th>
 							</tr>
-							<tr>
-								<td colspan="3">조회하신 게시글이 존재하지 않습니다.</td>
-							</tr>
-
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
+							<c:choose>
+								<c:when test="${empty noticeList }">
+									<tr>
+										<td colspan="3">조회하신 게시글이 존재하지 않습니다.</td>
+									</tr>
+								</c:when>
+								<c:otherwise>
+									<c:forEach items="${noticeList }" var="notice">
+										<tr>
+											<td>${notice.noticeNo }</td>
+											<td>${notice.noticeTitle }</td>
+											<td>${notice.noticeDate }</td>
+										</tr>
+									</c:forEach>
+								</c:otherwise>
+							</c:choose>
 						</table>
 					</div>
 				</form>
@@ -156,7 +163,7 @@
 					<h5>자유 게시판</h5>
 				</div>
 				<div align="right">
-					<span class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill">전체 0건</span>
+					<span class="badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill">전체 ${allCount.FREECNT }건</span>
 				</div>
 				<form action="" method="post">
 					<div style="padding-top: 50px">
@@ -166,15 +173,22 @@
 								<th>제목</th>
 								<th>작성일</th>
 							</tr>
-							<tr>
-								<td colspan="3">조회하신 게시글이 존재하지 않습니다.</td>
-							</tr>
-
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
+							<c:choose>
+								<c:when test="${empty freeList }">
+									<tr>
+										<td colspan="3">조회하신 게시글이 존재하지 않습니다.</td>
+									</tr>
+								</c:when>
+								<c:otherwise>
+									<c:forEach items="${freeList }" var="free">
+										<tr>
+											<td>${free.freeNo }</td>
+											<td>${free.freeTitle }</td>
+											<td>${free.freeDate }</td>
+										</tr>
+									</c:forEach>
+								</c:otherwise>
+							</c:choose>
 						</table>
 					</div>
 				</form>

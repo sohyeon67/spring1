@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Main">
+	<!--
+		정상적으로 동작하는 듯 해보이나 정상적으로 데이터가 출력되지 않음
+		select * from board
+		where rownum <= 5
+		order by bono desc
+		밑에 처럼 서브 쿼리 활용하기
+	 -->
+	<select id="selectBoardList" resultType="boardVO">
+		select b.*
+		from(
+			select a.*, row_number() over (order by a.bono desc) rnum
+			from(
+				select
+					bono, botitle, bocontent, bowriter, bodate, bohit
+				from board
+				where 1=1
+				order by bono desc
+			) a
+		) b
+		<![CDATA[
+			where rnum <= 5
+		]]>
+	</select>
+	
+	<!-- map에 담길 때 키가 대문자. jsp에서 allCount.BOARDCNT로 접근한다. -->
+	<select id="selectAllCount" resultType="hashMap">
+		select
+			(select count(bono) from board) boardCnt,
+			(select count(notice_no) from notice) noticeCnt,
+			(select count(free_no) from free) freeCnt
+		from dual
+	</select>
+	
+	
+	
+	
+	
+	<select id="selectNoticeList" resultType="noticeVO">
+		select b.*
+		from(
+			select a.*, row_number() over (order by a.notice_no desc) rnum
+			from(
+				select
+					notice_no, notice_title, notice_content, notice_writer, notice_date, notice_hit
+				from notice
+				where 1=1
+				order by notice_no desc
+			) a
+		) b
+		<![CDATA[
+			where rnum <= 5
+		]]>
+	</select>
+	
+	<select id="selectFreeList" resultType="freeVO">
+		select b.*
+		from(
+			select a.*, row_number() over (order by a.free_no desc) rnum
+			from(
+				select
+					free_no, free_title, free_content, free_writer, free_date, free_hit
+				from free
+				where 1=1
+				order by free_no desc
+			) a
+		) b
+		<![CDATA[
+			where rnum <= 5
+		]]>
+	</select>
+
+</mapper>
